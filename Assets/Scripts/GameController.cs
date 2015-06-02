@@ -12,10 +12,12 @@ public class GameController : MonoBehaviour {
 
 	public Thing[] things;
 	CircleCollider2D[] colliders;
-	List<int> thingsToKill;
+	
+	public Sprite[] thingSprites;
 	
 	List<Thing> hiddenThings;
 
+	float startTime;
 	float time;
 	float startTimeBetweenThings = 1f;
 	public float timeBetweenThings = 1f;
@@ -105,6 +107,7 @@ public class GameController : MonoBehaviour {
 				if (waitingForGame) {
 					waitingForGame = false;
 					playing = true;
+					startTime = Time.time;
 				}
 				
 				timeBetweenThings *= 0.9999f;
@@ -125,14 +128,16 @@ public class GameController : MonoBehaviour {
 		playing = false;
 		waitingForGame = false;
 		deadThings = 0;
-		thingsToKill = new List<int> ();
 		hiddenThings = new List<Thing> ();
 		colliders = new CircleCollider2D[things.Length];
+		
+		int currentIndex = GetSkinIndex();
 		for (int i = 0; i < things.Length; i++) {
 			Thing thing = things[i];
 			thing.Reset ();
 			colliders[i] = thing.GetComponent<CircleCollider2D> ();
 			hiddenThings.Add(thing);
+			thing.aliveSprite = thingSprites[currentIndex];
 		}
 		
 		time = 0;
@@ -154,8 +159,12 @@ public class GameController : MonoBehaviour {
 		
 		if (score > topScore) {
 			topScore = score;
-			PlayerPrefs.SetInt("top_score", topScore);
+			SetTopScore(topScore);
 		}
+		AddTotalTaps(score);
+		AddTotalGames(1);
+		AddTotalTime((int)(Time.time - startTime));
+		
 		menu.SetScore(score, topScore);
 		menu.gameObject.SetActive(true);
 		menu.Show();
@@ -163,5 +172,61 @@ public class GameController : MonoBehaviour {
 	
 	public void HideThing(Thing thing) {
 		hiddenThings.Add(thing);
+	}
+	
+	// Prefs
+	
+	public static int GetTotalTaps() {
+		return GetIntPref("total_taps");
+	}
+	
+	public static void AddTotalTaps(int amount) {
+		AddIntPref("total_taps", amount);
+	}
+	
+	public static int GetTotalTime() {
+		return GetIntPref("total_time");
+	}
+	
+	public static void AddTotalTime(int amount) {
+		AddIntPref("total_time", amount);
+	}
+	
+	public static int GetTotalGames() {
+		return GetIntPref("total_games");
+	}
+	
+	public static void AddTotalGames(int amount) {
+		AddIntPref("total_games", amount);
+	}
+		
+	public static int GetTopScore() {
+		return GetIntPref("top_score");
+	}
+	
+	public static void SetTopScore(int amount) {
+		SetIntPref("top_score", amount);
+	}
+
+	public static int GetSkinIndex() {
+		return GetIntPref("skin_index");
+	}
+	
+	public static void SetSkinIndex(int index) {
+		SetIntPref("skin_index", index);
+	}
+
+	// Shared Prefs
+	
+	public static void SetIntPref(string name, int amount) {
+		PlayerPrefs.SetInt(name, amount);
+	}
+	
+	public static int GetIntPref(string name) {
+		return PlayerPrefs.GetInt(name);
+	}
+	
+	public static void AddIntPref(string name, int amount) {
+		PlayerPrefs.SetInt(name, PlayerPrefs.GetInt(name) + amount);
 	}
 }
