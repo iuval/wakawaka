@@ -212,6 +212,10 @@ PlayerSettings:
   psp2NPTrophyPackPath: 
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 12
+<<<<<<< HEAD
+=======
+  psp2NPTitleDatPath: 
+>>>>>>> f271585... Add git ignore
   psp2NPCommsID: 
   psp2NPCommunicationsID: 
   psp2NPCommsPassphrase: 
@@ -226,6 +230,10 @@ PlayerSettings:
   psp2PatchOriginalPackage: 
   psp2PackagePassword: pQO95z2aT37u0yeqlAwK3UhZ3cukqbpv
   psp2KeystoneFile: 
+<<<<<<< HEAD
+=======
+  psp2MemoryExpansionMode: 0
+>>>>>>> f271585... Add git ignore
   psp2DRMType: 0
   psp2StorageType: 0
   psp2MediaCapacity: 0
@@ -361,6 +369,10 @@ PlayerSettings:
   XboxOnePackagingOverridePath: 
   XboxOneAppManifestOverridePath: 
   XboxOnePackageEncryption: 0
+<<<<<<< HEAD
+=======
+  XboxOnePackageUpdateGranularity: 2
+>>>>>>> f271585... Add git ignore
   XboxOneDescription: 
   XboxOneIsContentPackage: 0
   XboxOneEnableGPUVariability: 0
