@@ -4,7 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Rand = UnityEngine.Random;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 	public static RuntimePlatform platform = Application.platform;
 
 	public GameMenu menu;
@@ -32,18 +33,20 @@ public class GameController : MonoBehaviour {
 	int topScore = 0;
 	int score = 0;
 
-	void Start () {
-		topScore = PlayerPrefs.GetInt("top_score");
-		menu.SetScore(score, topScore);
+	void Start ()
+	{
+		topScore = PlayerPrefs.GetInt ("top_score");
+		menu.SetScore (score, topScore);
 	}
 	
-	void Update () {
+	void Update ()
+	{
 		if (playing) {
 			if (hiddenThings.Count > 0) {
 				time -= Time.deltaTime;
 				if (time <= 0) {
-					ShowThing();
-					time = Rand.Range(timeBetweenThings, timeBetweenThings * 1.1f);
+					ShowThing ();
+					time = Rand.Range (timeBetweenThings, timeBetweenThings * 1.1f);
 				}
 			}
 			
@@ -56,51 +59,54 @@ public class GameController : MonoBehaviour {
 			}
 			
 			if (deadThings == 9) {
-				EndGame();
+				EndGame ();
 			}
 		} else if (waitingForGame) {
 			CheckForInput ();
 		}
 	}
 	
-	void ShowThing () {
-		Thing thing = hiddenThings[Rand.Range(0, hiddenThings.Count - 1)];
+	void ShowThing ()
+	{
+		Thing thing = hiddenThings [Rand.Range (0, hiddenThings.Count - 1)];
 		if (thing) {
-			bool isBad = Rand.Range(0f, 1f) <= badThingChance;
+			bool isBad = Rand.Range (0f, 1f) <= badThingChance;
 			thing.Up (isBad, thingVisibleTime);
-			hiddenThings.Remove(thing);
+			hiddenThings.Remove (thing);
 		}
 	}
 	
-	void CheckForInput () {
+	void CheckForInput ()
+	{
 		if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
 			foreach (Touch touch in Input.touches) {
-				if (touch.phase.Equals(TouchPhase.Began)) {	
+				if (touch.phase.Equals (TouchPhase.Began)) {	
 					for (int j = 0; j < colliders.Length; ++j) {
-						Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
-						if (colliders[j].OverlapPoint(pos)) {
-							TapThing(colliders[j].GetComponent<Thing>());
+						Vector3 pos = Camera.main.ScreenToWorldPoint (touch.position);
+						if (colliders [j].OverlapPoint (pos)) {
+							TapThing (colliders [j].GetComponent<Thing> ());
 						}
 					}
 				}
 			}
 		} else {
-			if (Input.GetMouseButtonDown(0)) {
+			if (Input.GetMouseButtonDown (0)) {
 				for (int j = 0; j < colliders.Length; ++j) {
-					Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-					if (colliders[j].OverlapPoint(pos)) {
-						TapThing(colliders[j].GetComponent<Thing>());
+					Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+					if (colliders [j].OverlapPoint (pos)) {
+						TapThing (colliders [j].GetComponent<Thing> ());
 					}
 				}
 			}
 		}
 	}
 	
-	void TapThing (Thing thing) {
+	void TapThing (Thing thing)
+	{
 		if (thing.alive) {
 			if (thing.visible && !thing.isBad) {
-				thing.Tap();
-				hiddenThings.Add(thing);
+				thing.Tap ();
+				hiddenThings.Add (thing);
 				score += 1;
 				scoreText.text = score + "";
 				
@@ -113,7 +119,7 @@ public class GameController : MonoBehaviour {
 				timeBetweenThings *= 0.9999f;
 			} else {
 				if (playing) {
-					thing.Kill();
+					thing.Kill ();
 					deadThings ++;
 					timeBetweenThings *= 0.8f;
 					thingVisibleTime *= 0.9f;
@@ -122,7 +128,8 @@ public class GameController : MonoBehaviour {
 		}
 	}
 	
-	void ResetGame () {
+	void ResetGame ()
+	{
 		timeBetweenThings = startTimeBetweenThings;
 		thingVisibleTime = startThingVisibleTime;
 		playing = false;
@@ -131,19 +138,20 @@ public class GameController : MonoBehaviour {
 		hiddenThings = new List<Thing> ();
 		colliders = new CircleCollider2D[things.Length];
 		
-		int currentIndex = GetSkinIndex();
+		int currentIndex = GetSkinIndex ();
 		for (int i = 0; i < things.Length; i++) {
-			Thing thing = things[i];
+			Thing thing = things [i];
 			thing.Reset ();
-			colliders[i] = thing.GetComponent<CircleCollider2D> ();
-			hiddenThings.Add(thing);
-			thing.aliveSprite = thingSprites[currentIndex];
+			colliders [i] = thing.GetComponent<CircleCollider2D> ();
+			hiddenThings.Add (thing);
+			thing.thingTheme.aliveSprite = thingSprites [currentIndex];
 		}
 		
 		time = 0;
 	}
 	
-	public void NewGame() {
+	public void NewGame ()
+	{
 		score = 0;
 		scoreText.text = score + "";
 		ResetGame ();
@@ -151,82 +159,97 @@ public class GameController : MonoBehaviour {
 		playing = false;
 		waitingForGame = true;
 
-		things[4].Up(false, 10f);
+		things [4].Up (false, 10f);
 	}
 	
-	public void EndGame() {
+	public void EndGame ()
+	{
 		playing = false;
 		
 		if (score > topScore) {
 			topScore = score;
-			SetTopScore(topScore);
+			SetTopScore (topScore);
 		}
-		AddTotalTaps(score);
-		AddTotalGames(1);
-		AddTotalTime((int)(Time.time - startTime));
+		AddTotalTaps (score);
+		AddTotalGames (1);
+		AddTotalTime ((int)(Time.time - startTime));
 		
-		menu.SetScore(score, topScore);
-		menu.gameObject.SetActive(true);
-		menu.Show();
+		menu.SetScore (score, topScore);
+		menu.gameObject.SetActive (true);
+		menu.Show ();
 	}
 	
-	public void HideThing(Thing thing) {
-		hiddenThings.Add(thing);
+	public void HideThing (Thing thing)
+	{
+		hiddenThings.Add (thing);
 	}
 	
 	// Prefs
 	
-	public static int GetTotalTaps() {
-		return GetIntPref("total_taps");
+	public static int GetTotalTaps ()
+	{
+		return GetIntPref ("total_taps");
 	}
 	
-	public static void AddTotalTaps(int amount) {
-		AddIntPref("total_taps", amount);
+	public static void AddTotalTaps (int amount)
+	{
+		AddIntPref ("total_taps", amount);
 	}
 	
-	public static int GetTotalTime() {
-		return GetIntPref("total_time");
+	public static int GetTotalTime ()
+	{
+		return GetIntPref ("total_time");
 	}
 	
-	public static void AddTotalTime(int amount) {
-		AddIntPref("total_time", amount);
+	public static void AddTotalTime (int amount)
+	{
+		AddIntPref ("total_time", amount);
 	}
 	
-	public static int GetTotalGames() {
-		return GetIntPref("total_games");
+	public static int GetTotalGames ()
+	{
+		return GetIntPref ("total_games");
 	}
 	
-	public static void AddTotalGames(int amount) {
-		AddIntPref("total_games", amount);
+	public static void AddTotalGames (int amount)
+	{
+		AddIntPref ("total_games", amount);
 	}
 		
-	public static int GetTopScore() {
-		return GetIntPref("top_score");
+	public static int GetTopScore ()
+	{
+		return GetIntPref ("top_score");
 	}
 	
-	public static void SetTopScore(int amount) {
-		SetIntPref("top_score", amount);
+	public static void SetTopScore (int amount)
+	{
+		SetIntPref ("top_score", amount);
 	}
 
-	public static int GetSkinIndex() {
-		return GetIntPref("skin_index");
+	public static int GetSkinIndex ()
+	{
+		return GetIntPref ("skin_index");
 	}
 	
-	public static void SetSkinIndex(int index) {
-		SetIntPref("skin_index", index);
+	public static void SetSkinIndex (int index)
+	{
+		SetIntPref ("skin_index", index);
 	}
 
 	// Shared Prefs
 	
-	public static void SetIntPref(string name, int amount) {
-		PlayerPrefs.SetInt(name, amount);
+	public static void SetIntPref (string name, int amount)
+	{
+		PlayerPrefs.SetInt (name, amount);
 	}
 	
-	public static int GetIntPref(string name) {
-		return PlayerPrefs.GetInt(name);
+	public static int GetIntPref (string name)
+	{
+		return PlayerPrefs.GetInt (name);
 	}
 	
-	public static void AddIntPref(string name, int amount) {
-		PlayerPrefs.SetInt(name, PlayerPrefs.GetInt(name) + amount);
+	public static void AddIntPref (string name, int amount)
+	{
+		PlayerPrefs.SetInt (name, PlayerPrefs.GetInt (name) + amount);
 	}
 }

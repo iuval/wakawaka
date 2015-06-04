@@ -2,45 +2,55 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GameMenu : MonoBehaviour {
+[ExecuteInEditMode]
+public class GameMenu : MonoBehaviour
+{
 
 	Animator anim;
 	public Text scoreText;
 	public Text topScoreText;
 	public StoreMenu store;
 
-	void Awake () {
+	void Awake ()
+	{
 		anim = GetComponentInChildren<Animator> ();
 	}
 			
-	void Start () {
+	void Start ()
+	{
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 	
 	}
 	
-	public void Show() {
-		gameObject.SetActive(true);
-		anim.SetTrigger("show");
+	public void Show ()
+	{
+		gameObject.SetActive (true);
+		anim.SetTrigger ("show");
 	}
 	
-	public void Hide() {
-		anim.SetTrigger("hide");
+	public void Hide ()
+	{
+		anim.SetTrigger ("hide");
 	}
 	
-	void Hidden() {
-		gameObject.SetActive(false);
+	void Hidden ()
+	{
+		gameObject.SetActive (false);
 	}
 	
-	public void SetScore(int score, int topScore) {
+	public void SetScore (int score, int topScore)
+	{
 		scoreText.text = "Score: " + score;
 		topScoreText.text = "Top Score: " + topScore;
 	}
 	
-	public void ShowStore() {
-		Hide();
-		store.Show();
+	public void ShowStore ()
+	{
+		Hide ();
+		store.Show ();
 	}
 }

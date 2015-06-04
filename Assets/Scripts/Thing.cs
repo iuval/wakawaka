@@ -1,7 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Thing : MonoBehaviour {
+[System.Serializable]
+public class ThingsTheme
+{
+	public Sprite aliveSprite;
+	public Sprite aliveBadSprite;
+	public Sprite deadSprite;
+}
+
+public class Thing : MonoBehaviour
+{
 
 	public float speed = 5f;
 	public float deltaY = 0.8f;
@@ -20,31 +29,32 @@ public class Thing : MonoBehaviour {
 	SpriteRenderer imageRenderer;
 	Transform imageTransform;
 	
-	public Sprite aliveSprite;
-	public Sprite aliveBadSprite;
-	public Sprite deadSprite;
+	public ThingsTheme thingTheme;
 	
 	GameController controller;
 	
-	void Awake () {
+	void Awake ()
+	{
 		controller = FindObjectOfType<GameController> ();
 		pos = Vector2.zero;
-		imageTransform = transform.FindChild("image");
+		imageTransform = transform.FindChild ("image");
 		imageRenderer = imageTransform.GetComponent<SpriteRenderer> ();
 	}
 
-	void Start () {
+	void Start ()
+	{
 		initY = imageTransform.position.y;
 		endY = imageTransform.position.y + deltaY;
-		imageRenderer.sprite = aliveSprite;
+		imageRenderer.sprite = thingTheme.aliveSprite;
 	}
 	
-	void Update () {
+	void Update ()
+	{
 		if (goingUp) {
 			pos = imageTransform.position;
-			pos.y = Mathf.MoveTowards(pos.y, endY, speed * Time.deltaTime);
+			pos.y = Mathf.MoveTowards (pos.y, endY, speed * Time.deltaTime);
 			
-			if (Mathf.Abs(pos.y - endY) < 0.01f) {
+			if (Mathf.Abs (pos.y - endY) < 0.01f) {
 				pos.y = endY;
 				goingUp = false;
 			}
@@ -52,9 +62,9 @@ public class Thing : MonoBehaviour {
 			imageTransform.position = pos;
 		} else if (goingDown) {
 			pos = imageTransform.position;
-			pos.y = Mathf.MoveTowards(pos.y, initY, speed * Time.deltaTime);
+			pos.y = Mathf.MoveTowards (pos.y, initY, speed * Time.deltaTime);
 			
-			if (Mathf.Abs(pos.y - initY) < 0.01f) {
+			if (Mathf.Abs (pos.y - initY) < 0.01f) {
 				pos.y = initY;
 				goingDown = false;
 			}
@@ -65,8 +75,8 @@ public class Thing : MonoBehaviour {
 				time -= Time.deltaTime;
 				if (time <= 0) {
 					if (isBad) {
-						Tap();
-						controller.HideThing(this);
+						Tap ();
+						controller.HideThing (this);
 					} else {
 						scaped = true;
 					}
@@ -75,7 +85,8 @@ public class Thing : MonoBehaviour {
 		}
 	}
 	
-	public void Reset () {
+	public void Reset ()
+	{
 		visible = false;
 		goingUp = false;
 		goingDown = false;
@@ -86,13 +97,14 @@ public class Thing : MonoBehaviour {
 		imageTransform.position = pos;
 	}
 	
-	public void Up(bool bad, float visibleTime) {
+	public void Up (bool bad, float visibleTime)
+	{
 		if (alive) {
 			isBad = bad;
 			if (isBad) {
-				imageRenderer.sprite = aliveBadSprite;
+				imageRenderer.sprite = thingTheme.aliveBadSprite;
 			} else {
-				imageRenderer.sprite = aliveSprite;
+				imageRenderer.sprite = thingTheme.aliveSprite;
 			}
 			time = visibleTime;
 		}
@@ -101,7 +113,8 @@ public class Thing : MonoBehaviour {
 		visible = true;
 	}
 	
-	public void Tap() {
+	public void Tap ()
+	{
 		if (visible) {
 			visible = false;
 			goingUp = false;
@@ -109,9 +122,10 @@ public class Thing : MonoBehaviour {
 		}
 	}
 	
-	public void Kill() {
+	public void Kill ()
+	{
 		alive = false;
-		imageRenderer.sprite = deadSprite;
-		Up(false, 0);
+		imageRenderer.sprite = thingTheme.deadSprite;
+		Up (false, 0);
 	}
 }
