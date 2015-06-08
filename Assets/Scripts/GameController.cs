@@ -33,7 +33,6 @@ public class GameController : MonoBehaviour {
 	int score = 0;
 
 	void Start () {
-		
 		topScore = PlayerPrefs.GetInt("top_score");
 		menu.SetScore(score, topScore);
 		menu.Show();
@@ -51,7 +50,9 @@ public class GameController : MonoBehaviour {
 			
 			CheckForInput ();
 			
-			foreach (Thing thing in things) {
+			Thing thing;
+			for (int i = 0; i < things.Length; i ++) {
+				thing = things[i];
 				if (thing.alive && thing.scaped) {
 					EndGame ();
 				}
@@ -65,29 +66,6 @@ public class GameController : MonoBehaviour {
 		}
 	}
 	
-	void LogCallback(FBResult response) {
-		Debug.Log(response.Text);
-	}
-	
-	public void InitDelegate() {
-		FB.Feed(
-			link: "https://www.youtube.com/watch?v=oavMtUWDBTM",
-			linkName: "WakaWaka",
-			linkCaption: "Best game since la 'Arrimadia'",
-			linkDescription: "4 out of 3 humans play this game when forced to.",
-			picture: "http://upload.wikimedia.org/wikipedia/en/c/c5/Shakira_Waka_Waka_Video_2010.jpg",
-			callback: LogCallback
-		);
-	}
-	
-	public void HideUnityDelegate(bool isUnityShown) {
-	
-	}
-	
-	public void ShareOnFacebook() {
-		FB.Init(InitDelegate, HideUnityDelegate);
-	}
-	
 	void ShowThing () {
 		Thing thing = hiddenThings[Rand.Range(0, hiddenThings.Count - 1)];
 		if (thing) {
@@ -99,7 +77,10 @@ public class GameController : MonoBehaviour {
 	
 	void CheckForInput () {
 		if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
-			foreach (Touch touch in Input.touches) {
+			Touch touch;
+			Touch[] touches = Input.touches;
+			for (int i = 0; i < touches.Length; ++i) {
+				touch = touches[i];
 				if (touch.phase.Equals(TouchPhase.Began)) {	
 					for (int j = 0; j < colliders.Length; ++j) {
 						Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);

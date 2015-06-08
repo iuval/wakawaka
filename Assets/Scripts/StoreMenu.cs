@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Soomla.Store;
 
 public class StoreMenu : MonoBehaviour {
-	
 	Animator anim;
 	public Text descriptionText;
 	public Button useButton;
@@ -18,6 +18,8 @@ public class StoreMenu : MonoBehaviour {
 	void Start () {
 		currentIndex = PlayerPrefs.GetInt("current_skin_index");
 		ChangeTo(currentIndex);
+		
+		SoomlaStore.Initialize(new InAppAssets());
 	}
 
 	void Update () {
@@ -43,6 +45,11 @@ public class StoreMenu : MonoBehaviour {
 	}
 	
 	public void UserCurrent() {
+		if (currentIndex == -1) {
+			StoreInventory.BuyItem(InAppAssets.UNLOCK_ALL_LIFETIME_PRODUCT_ID);
+		} else if (currentIndex == -2) {
+			StoreInventory.BuyItem(InAppAssets.NO_ADS_LIFETIME_PRODUCT_ID);
+		}  
 		PlayerPrefs.SetInt("current_skin_index", currentIndex);
 		Back();
 	}
