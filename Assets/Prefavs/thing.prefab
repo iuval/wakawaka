@@ -84,15 +84,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   deltaY: .800000012
-  waitTime: 2
-  visibleTime: 1
   alive: 1
   visible: 0
   scaped: 0
   isBad: 0
-  aliveSprite: {fileID: 21300000, guid: ab7c518461e9e40d69a817b0d4e9fa8c, type: 3}
-  aliveBadSprite: {fileID: 21300000, guid: 9866bec76c1a7461d81631378d667c02, type: 3}
-  deadSprite: {fileID: 21300000, guid: 0119a0e92abdb4febbf379c5d688f09b, type: 3}
+  thingsTheme:
+    aliveSprite: {fileID: 21300000, guid: ab7c518461e9e40d69a817b0d4e9fa8c, type: 3}
+    aliveBadSprite: {fileID: 21300000, guid: 9866bec76c1a7461d81631378d667c02, type: 3}
+    deadSprite: {fileID: 21300000, guid: 0119a0e92abdb4febbf379c5d688f09b, type: 3}
 --- !u!212 &21232410
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -125,7 +124,22 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: thingsTheme.aliveBadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9866bec76c1a7461d81631378d667c02,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: thingsTheme.aliveSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ab7c518461e9e40d69a817b0d4e9fa8c,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: thingsTheme.deadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0119a0e92abdb4febbf379c5d688f09b,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125206}

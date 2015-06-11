@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class ThingsTheme
+{
+	public Sprite aliveSprite;
+	public Sprite aliveBadSprite;
+	public Sprite deadSprite;
+}
+
 public class Thing : MonoBehaviour {
 
 	public float speed = 5f;
@@ -9,6 +17,7 @@ public class Thing : MonoBehaviour {
 	public bool visible = false;
 	public bool scaped = false;
 	public bool isBad = false;
+	public ThingsTheme thingsTheme;
 	
 	float time = 0;
 	bool goingUp = false;
@@ -19,10 +28,6 @@ public class Thing : MonoBehaviour {
 	
 	SpriteRenderer imageRenderer;
 	Transform imageTransform;
-	
-	public Sprite aliveSprite;
-	public Sprite aliveBadSprite;
-	public Sprite deadSprite;
 	
 	GameController controller;
 	
@@ -36,7 +41,7 @@ public class Thing : MonoBehaviour {
 	void Start () {
 		initY = imageTransform.position.y;
 		endY = imageTransform.position.y + deltaY;
-		imageRenderer.sprite = aliveSprite;
+		imageRenderer.sprite = thingsTheme.aliveSprite;
 	}
 	
 	void Update () {
@@ -90,9 +95,9 @@ public class Thing : MonoBehaviour {
 		if (alive) {
 			isBad = bad;
 			if (isBad) {
-				imageRenderer.sprite = aliveBadSprite;
+				imageRenderer.sprite = thingsTheme.aliveBadSprite;
 			} else {
-				imageRenderer.sprite = aliveSprite;
+				imageRenderer.sprite = thingsTheme.aliveSprite;
 			}
 			time = visibleTime;
 		}
@@ -111,7 +116,7 @@ public class Thing : MonoBehaviour {
 	
 	public void Kill() {
 		alive = false;
-		imageRenderer.sprite = deadSprite;
+		imageRenderer.sprite = thingsTheme.deadSprite;
 		Up(false, 0);
 	}
 }
