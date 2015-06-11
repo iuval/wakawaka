@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.Serializable]
-public class ThingsTheme : System.Object
+public class ThingsTheme
 {
 	public Sprite aliveSprite;
 	public Sprite aliveBadSprite;
@@ -41,7 +41,7 @@ public class Thing : MonoBehaviour {
 	void Start () {
 		initY = imageTransform.position.y;
 		endY = imageTransform.position.y + deltaY;
-		imageRenderer.sprite = thingTheme.aliveSprite;
+		imageRenderer.sprite = thingsTheme.aliveSprite;
 	}
 	
 	void Update () {
@@ -95,9 +95,9 @@ public class Thing : MonoBehaviour {
 		if (alive) {
 			isBad = bad;
 			if (isBad) {
-				imageRenderer.sprite = thingTheme.aliveBadSprite;
+				imageRenderer.sprite = thingsTheme.aliveBadSprite;
 			} else {
-				imageRenderer.sprite = thingTheme.aliveSprite;
+				imageRenderer.sprite = thingsTheme.aliveSprite;
 			}
 			time = visibleTime;
 		}
@@ -116,7 +116,7 @@ public class Thing : MonoBehaviour {
 	
 	public void Kill() {
 		alive = false;
-		imageRenderer.sprite = thingTheme.deadSprite;
+		imageRenderer.sprite = thingsTheme.deadSprite;
 		Up(false, 0);
 	}
 }

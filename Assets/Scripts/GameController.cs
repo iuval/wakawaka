@@ -143,7 +143,7 @@ public class GameController : MonoBehaviour {
 			thing.Reset ();
 			colliders[i] = thing.GetComponent<CircleCollider2D> ();
 			hiddenThings.Add(thing);
-			thing.aliveSprite = thingSprites[currentIndex];
+			thing.thingsTheme.aliveSprite = thingSprites[currentIndex];
 		}
 		
 		time = 0;
