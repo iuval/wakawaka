@@ -9,6 +9,7 @@ public class Thing : MonoBehaviour {
 	public bool visible = false;
 	public bool scaped = false;
 	public bool isBad = false;
+	public bool visibleAtStart = false;
 	
 	float time = 0;
 	bool goingUp = false;
@@ -19,15 +20,16 @@ public class Thing : MonoBehaviour {
 	
 	SpriteRenderer imageRenderer;
 	Transform imageTransform;
-	
-	public Sprite aliveSprite;
-	public Sprite aliveBadSprite;
-	public Sprite deadSprite;
+
+	public Sprite sprite;
 	
 	GameController controller;
 	
+	AudioSource audio;
+	
 	void Awake () {
 		controller = FindObjectOfType<GameController> ();
+		audio = GetComponent<AudioSource> ();
 		pos = Vector2.zero;
 		imageTransform = transform.FindChild("image");
 		imageRenderer = imageTransform.GetComponent<SpriteRenderer> ();
@@ -36,7 +38,6 @@ public class Thing : MonoBehaviour {
 	void Start () {
 		initY = imageTransform.position.y;
 		endY = imageTransform.position.y + deltaY;
-		imageRenderer.sprite = aliveSprite;
 	}
 	
 	void Update () {
@@ -65,10 +66,13 @@ public class Thing : MonoBehaviour {
 				time -= Time.deltaTime;
 				if (time <= 0) {
 					if (isBad) {
-						Tap();
+						Hide ();
 						controller.HideThing(this);
 					} else {
 						scaped = true;
+						
+//						audio.clip = GameController.endGameClip;
+//						audio.Play ();
 					}
 				}
 			}
@@ -84,15 +88,16 @@ public class Thing : MonoBehaviour {
 		pos = imageTransform.position;
 		pos.y = initY;
 		imageTransform.position = pos;
+		imageRenderer.sprite = sprite;
 	}
 	
 	public void Up(bool bad, float visibleTime) {
 		if (alive) {
 			isBad = bad;
 			if (isBad) {
-				imageRenderer.sprite = aliveBadSprite;
+				imageTransform.localScale = new Vector2(1, -1);
 			} else {
-				imageRenderer.sprite = aliveSprite;
+				imageTransform.localScale = new Vector2(1, 1);
 			}
 			time = visibleTime;
 		}
@@ -101,17 +106,17 @@ public class Thing : MonoBehaviour {
 		visible = true;
 	}
 	
-	public void Tap() {
+	public void Tap(AudioClip clip) {
 		if (visible) {
-			visible = false;
-			goingUp = false;
-			goingDown = true;
+			Hide ();
+//			audio.clip = clip;
+//			audio.Play ();
 		}
 	}
 	
-	public void Kill() {
-		alive = false;
-		imageRenderer.sprite = deadSprite;
-		Up(false, 0);
+	void Hide() {
+		visible = false;
+		goingUp = false;
+		goingDown = true;
 	}
 }

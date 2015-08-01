@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Rand = UnityEngine.Random;
+using UnityEngine.Advertisements;
 
 public class GameController : MonoBehaviour {
 	public static RuntimePlatform platform = Application.platform;
@@ -10,10 +11,12 @@ public class GameController : MonoBehaviour {
 	public GameMenu menu;
 	public Text scoreText;
 
-	public Thing[] things;
+	Thing[] things;
 	CircleCollider2D[] colliders;
 	
 	public Sprite[] thingSprites;
+	public AudioClip[] thingSounds;
+	public AudioClip endGameClip;
 	
 	List<Thing> hiddenThings;
 
@@ -31,11 +34,18 @@ public class GameController : MonoBehaviour {
 	int deadThings = 0;
 	int topScore = 0;
 	int score = 0;
+	
+	int loseCount = 0;
 
 	void Start () {
+		Screen.SetResolution(640, 480, true);
+		
 		topScore = PlayerPrefs.GetInt("top_score");
 		menu.SetScore(score, topScore);
 		menu.Show();
+		Advertisement.Initialize ("46015", false);
+		
+		things = FindObjectsOfType<Thing>();
 	}
 	
 	void Update () {
@@ -55,6 +65,14 @@ public class GameController : MonoBehaviour {
 				thing = things[i];
 				if (thing.alive && thing.scaped) {
 					EndGame ();
+					
+					loseCount ++;
+					if (loseCount == 3) {
+						loseCount = 0;
+						if (Advertisement.isReady()){
+							Advertisement.Show();
+						}
+					}
 				}
 			}
 			
@@ -105,7 +123,7 @@ public class GameController : MonoBehaviour {
 	void TapThing (Thing thing) {
 		if (thing.alive) {
 			if (thing.visible && !thing.isBad) {
-				thing.Tap();
+				thing.Tap(thingSounds[Rand.Range(0, thingSounds.Length - 1)]);
 				hiddenThings.Add(thing);
 				score += 1;
 				scoreText.text = score + "";
@@ -119,7 +137,6 @@ public class GameController : MonoBehaviour {
 				timeBetweenThings *= 0.9999f;
 			} else {
 				if (playing) {
-					thing.Kill();
 					deadThings ++;
 					timeBetweenThings *= 0.8f;
 					thingVisibleTime *= 0.9f;
@@ -140,10 +157,10 @@ public class GameController : MonoBehaviour {
 		int currentIndex = GetSkinIndex();
 		for (int i = 0; i < things.Length; i++) {
 			Thing thing = things[i];
-			thing.Reset ();
 			colliders[i] = thing.GetComponent<CircleCollider2D> ();
 			hiddenThings.Add(thing);
-			thing.aliveSprite = thingSprites[currentIndex];
+			thing.sprite = thingSprites[currentIndex];
+			thing.Reset ();
 		}
 		
 		time = 0;
@@ -157,7 +174,11 @@ public class GameController : MonoBehaviour {
 		playing = false;
 		waitingForGame = true;
 
-		things[4].Up(false, 10f);
+		for (int i = 0; i < things.Length; i ++) {
+			if (things[i].visibleAtStart) {
+				things[i].Up(false, 10f);		
+			}
+		}
 	}
 	
 	public void EndGame() {

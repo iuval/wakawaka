@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400952}
   - 58: {fileID: 5846016}
   - 114: {fileID: 11428008}
+  - 82: {fileID: 8292818}
   m_Layer: 0
   m_Name: thing
   m_TagString: Untagged
@@ -71,6 +72,75 @@ CircleCollider2D:
   m_Offset: {x: 0, y: .970000029}
   serializedVersion: 2
   m_Radius: .349999994
+--- !u!82 &8292818
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 125206}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!114 &11428008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,15 +154,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   deltaY: .800000012
-  waitTime: 2
-  visibleTime: 1
   alive: 1
   visible: 0
   scaped: 0
   isBad: 0
-  aliveSprite: {fileID: 21300000, guid: ab7c518461e9e40d69a817b0d4e9fa8c, type: 3}
-  aliveBadSprite: {fileID: 21300000, guid: 9866bec76c1a7461d81631378d667c02, type: 3}
-  deadSprite: {fileID: 21300000, guid: 0119a0e92abdb4febbf379c5d688f09b, type: 3}
+  visibleAtStart: 0
+  sprite: {fileID: 0}
 --- !u!212 &21232410
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -125,7 +192,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125206}
